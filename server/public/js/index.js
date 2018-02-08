@@ -9224,7 +9224,64 @@
 /* 331 */
 /***/ (function(module, exports) {
 
-	"use strict";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Timer = function () {
+	    function Timer() {
+	        _classCallCheck(this, Timer);
+	    }
+
+	    _createClass(Timer, [{
+	        key: 'countdown',
+	        value: function countdown(end, update, handle) {
+	            var now = new Date().getTime();
+	            var self = this;
+	            if (now - end) {
+	                handle.call(self);
+	            } else {
+	                var last_time = end - now;
+	                var px_d = 1000 * 60 * 60 * 24;
+	                var px_h = 1000 * 60 * 60;
+	                var px_m = 1000 * 60;
+	                var px_s = 1000;
+	                var d = Math.floor(last_time / px_d);
+	                var h = Math.floor((last_time - d * px_d) / px_h);
+	                var m = Math.floor((last_time - d * px_d - h * px_h) / px_m);
+	                var s = Math.floor((last_time - d * px_d - h * px_h - m * px_m) / px_s);
+	                var r = [];
+	                if (d > 0) {
+	                    r.push('<em>' + d + '</em>\u5929');
+	                }
+	                if (r.length || h > 0) {
+	                    r.push('<em>' + h + '</em>\u65F6');
+	                }
+	                if (r.length || m > 0) {
+	                    r.push('<em>' + m + '</em>\u5206');
+	                }
+	                if (r.length || s > 0) {
+	                    r.push('<em>' + s + '</em>\u79D2');
+	                }
+	                self.last_time = r.join(' ');
+	                update.call(self, r.join(' '));
+	                setTimeout(function () {
+	                    self.countdown(end, update, handle);
+	                }, 1000);
+	            }
+	        }
+	    }]);
+
+	    return Timer;
+	}();
+
+	exports.default = Timer;
 
 /***/ }),
 /* 332 */
@@ -9234,9 +9291,97 @@
 
 /***/ }),
 /* 333 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jquery = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"jquery\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Interface = function () {
+	    function Interface() {
+	        _classCallCheck(this, Interface);
+	    }
+
+	    _createClass(Interface, [{
+	        key: 'getOmit',
+	        value: function getOmit(issue) {
+	            var self = this;
+	            return new Promise(function (resolve, reject) {
+	                _jquery2.default.ajax({
+	                    url: '/get/omit',
+	                    data: {
+	                        issue: issue
+	                    },
+	                    dataType: 'json',
+	                    success: function success(res) {
+	                        self.setOmit(res.data);
+	                        resolve.call(self, res);
+	                    },
+	                    error: function error(err) {
+	                        reject.call(err);
+	                    }
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'getOpenCode',
+	        value: function getOpenCode(issue) {
+	            var self = this;
+	            return new Promise(function (resolve, reject) {
+	                _jquery2.default.ajax({
+	                    url: '/get/opencode',
+	                    data: {
+	                        issue: issue
+	                    },
+	                    dataType: 'json',
+	                    success: function success(res) {
+	                        self.setOpenCode(res.data);
+	                        resolve.call(self, res);
+	                    },
+	                    error: function error(err) {
+	                        reject.call(err);
+	                    }
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'getState',
+	        value: function getState(issue) {
+	            var self = this;
+	            return new Promise(function (resolve, reject) {
+	                _jquery2.default.ajax({
+	                    url: '/get/state',
+	                    data: {
+	                        issue: issue
+	                    },
+	                    dataType: 'json',
+	                    success: function success(res) {
+	                        resolve.call(self, res);
+	                    },
+	                    error: function error(err) {
+	                        reject.call(err);
+	                    }
+	                });
+	            });
+	        }
+	    }]);
+
+	    return Interface;
+	}();
+
+	exports.default = Interface;
 
 /***/ })
 /******/ ]);
